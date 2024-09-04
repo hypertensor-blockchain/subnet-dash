@@ -1,0 +1,312 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=1024">
+  <link rel="icon" class="js-site-favicon" type="image/png" href="./static/logo-black.png">
+  <title>TENSOR Dashboard</title>
+  <link href="./static/health.css" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="flex flex-col min-h-screen justify-between">
+
+<header>
+  <div class="flex flex-row gap-2.5 justify-center items-center pt-4">
+    <div>
+      <a target="_blank" href="https://hypertensor.org"><img src="./static/logo-black.png" height="50" width="50"></a>
+    </div>
+    <div>
+      <h1>TENSOR <span class="text-gray-900" style="font-size: 13pt;">Dashboard</span></h1>
+    </div>
+  </div>
+</header>
+
+<main>
+
+{% set state_chars = dict(offline="_", unreachable="✖", joining="●", online="●") %}
+{% set peer_state_colors = dict(offline="gray", unreachable="red", joining="blue", online="emerald") %}
+{% set model_state_colors = dict(healthy="green", broken="red") %}
+
+<section>
+  <p class="">
+    Bootstrap peers:
+    <span class="bootstrap-map">
+      {% for state in bootstrap_states %}<span class="{{ state }}">{{ state_chars[state] }}</span>{% endfor %}
+    </span>
+  </p>
+</section>
+
+<section>
+  <p class="">
+    Swarm:
+    <span class="toc">
+    {% for model in model_reports %}
+    <a class="{{ model.state }}" href="#{{ model.short_name }}" title="DHT prefix: {{ model.dht_prefix }}">
+      <span class="bg-{{ model_state_colors[model.state] }}-100 text-{{ model_state_colors[model.state] }}-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-lg">{{ model.short_name }}</span>
+    </a>
+    {% if not loop.last %}<span class="bull">&bull;</span>{% endif %}
+    {% endfor %}
+    </span>
+  </p>
+</section>
+
+<section>
+  <p class="">
+    <span class="bg-indigo-100 text-indigo-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-lg">Top contributors</span>
+    <span class="top-contributors">
+    {% for name, num_blocks in top_contributors.most_common(5) %}
+    <span class="entry">
+      <span class="name">
+        {% if name.startswith('http://') or name.startswith('https://') %}
+        <a target="_blank" href="{{ name }}">{{ name.replace('http://', '').replace('https://', '').rstrip('/') | truncate(20, True, '…') }}</a>
+        {% else %}
+        {{ name|truncate(20, True, '…') }}
+        {% endif %}
+      </span>
+      <span class="num-blocks gray">({{ num_blocks }} blocks)</span>
+    </span>
+    {% if not loop.last %}<span class="bull">&bull;</span>{% endif %}
+    {% endfor %}
+    </span>
+  </p>
+</section>
+
+{% for model in model_reports %}
+<section id="{{ model.short_name }}">
+  <p class="">
+    <span class="bg-{{ model_state_colors[model.state] }}-100 text-{{ model_state_colors[model.state] }}-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-lg">Model</span>
+    <a target="_blank" href="{{ model.repository }}" title="DHT prefix: {{ model.dht_prefix }}">{{ model.name }}</a>
+    (<span class="{{ model.state }}">{{ model.state }}</span>):
+  </p>
+
+  {% if not model.official %}
+  <p class="hint">This model is <b>not</b> officially supported. Use it at your own risk.</p>
+  {% endif %}
+
+  {% if model.limited %}
+  <p class="hint">
+    This model is supposed to be used by our <a target="_blank" href="https://chat.hypertensor.org">chatbot app</a> only.
+    We do not provide a public API for this model due to
+    <a target="_blank" href="https://huggingface.co/spaces/tiiuae/falcon-180b-license/blob/main/LICENSE.txt" class="text-blue-400">license</a> restrictions.
+  </p>
+  {% endif %}
+
+  <table class="servers">
+    <thead class="bg-[#eaeaff]">
+      <tr>
+        <th>Server ID <a class="show-full-peer-id" href="#">»</a></th>
+        <th>Version</td>
+        <th>Throughput <a class="toggle-rps-details" href="#">»</a></th>
+        <th class="rps-details" style="display: none;">Inference <a class="explain-compute-rps" href="#">?</a></th>
+        <th class="rps-details" style="display: none;">Forward <a class="explain-compute-rps" href="#">?</a></th>
+        <th class="rps-details" style="display: none;">Network <a class="explain-network-rps" href="#">?</a></th>
+        <th>Precision <a class="explain-precision" href="#">?</a></th>
+        <th>LoRAs <a class="explain-adapters" href="#">?</a></th>
+        <th>Cache <a class="explain-cache" href="#">?</a></th>
+        <th>Avl. <a class="explain-avl" href="#">?</a></th>
+        <th>Pings <a class="explain-pings" href="#">?</a></th>
+        <th class="bm-header" colspan="{{ model.num_blocks + 1 }}">Served blocks</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in model.server_rows %}
+      {% set server_info = row.span.server_info %}
+      <tr>
+        <td>
+          <span class="short-peer-id">{{ row.short_peer_id }}</span>
+          <span class="peer-id" style="display: none;">{{ row.peer_id }}</span>
+        </td>
+        <td>{% if server_info.version %}{{ server_info.version|truncate(10, True, '…') }}{% else %}&lt; 2.0.0{% endif %}</td>
+        <td>{{ "%.0f" | format(server_info.throughput) }} tok/s</td>
+        <td class="rps-details" style="display: none;">
+          {% if server_info.inference_rps is not none %}{{ "%.0f" | format(server_info.inference_rps) }}{% endif %}
+        </td>
+        <td class="rps-details" style="display: none;">
+          {% if server_info.forward_rps is not none %}{{ "%.0f" | format(server_info.forward_rps) }}{% endif %}
+        </td>
+        <td class="rps-details" style="display: none;">
+          {% if server_info.network_rps is not none %}{{ "%.0f" | format(server_info.network_rps) }}{% endif %}
+        </td>
+        <td>
+          {% if server_info.torch_dtype %}{{ server_info.torch_dtype | replace('float', 'f') }}{% endif %}
+          {% if server_info.quant_type and server_info.quant_type != "none" %}({{ server_info.quant_type }}){% endif %}
+        </td>
+        <td>
+          {% for adapter in row.adapters %}
+          <a target="_blank" href="https://huggingface.co/{{adapter.name}}"">{{ adapter.short_name }}</a>
+          {% endfor %}
+        </td>
+        <td>{% if server_info.cache_tokens_left is not none %}{{ row.cache_tokens_left_per_block }}{% endif %}</td>
+        <td>{% if server_info.using_relay is not none %}{% if server_info.using_relay %}Relay{% else %}Direct{% endif %}{% endif %}</td>
+        <td class="ping" data-peer-id="{{ row.peer_id }}">
+          {% if server_info.next_pings %}
+          <a class="show" href="#">Show</a>
+          <a class="hide" style="display: none;" href="#">Hide</a>
+          {% endif %}
+          {% for source_id, rtt in row.pings_to_me.items() %}
+          <span style="display: none;" class="rtt" data-source-id="{{ source_id }}">
+          {% if rtt <= 5 %}{{ "%.1f ms" | format(rtt * 1000) }}{% else %}&gt; 5 s{% endif %}
+          </span>
+          {% endfor %}
+        </td>
+        <td>{{ row.span.start }}:{{ row.span.end }}</td>
+        {% for _ in range(0, row.span.start) %}<td class="bm drop-shadow-sm border-white border-2 rounded-lg bg-slate-300 hover:bg-slate-200 transition duration-75"> </td>{% endfor %}
+        <span>{% for _ in range(row.span.start, row.span.end) %}<td class="bm drop-shadow-sm border-white border-2 rounded-lg bg-{{peer_state_colors[row.state]}}-200 hover:bg-{{peer_state_colors[row.state]}}-100  transition duration-75 {{ row.state }}">{{ state_chars[row.state] }}</td>{% endfor %}</span>
+        {% for _ in range(row.span.end, model.num_blocks) %}<td class="bm drop-shadow-sm border-white border-2 rounded-lg bg-slate-300 hover:bg-slate-200 transition duration-75"> </td>{% endfor %}
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  {% if model.state == "broken" %}
+  <p class="hint text-gray-400">
+    <b class="">Not enough servers?</b>
+    <a target="_blank" href="https://github.com/hypertensor-blockchain/subnet-llm" class="text-blue-400">Connect your GPU</a>
+    and increase the subnets capacity!
+  </p>
+  {% endif %}
+</section>
+{% endfor %}
+
+<section>
+  <span class="text-gray-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-lg border border-gray-500">Legend</span>
+
+  <table class="legend">
+    <thead>
+      <tr>
+        <th colspan="2">Status</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="bm !text-center drop-shadow-sm border-white border-2 rounded-lg bg-{{peer_state_colors['online']}}-200 hover:bg-{{peer_state_colors['online']}}-100  transition duration-75 {{ 'online' }}">
+          {{ state_chars['online'] }}
+        </td>
+        <td class="px-3">online</td>
+        <td class="px-3">Up and running</td>
+      </tr>
+      <tr>
+        <td class="bm !text-center drop-shadow-sm border-white border-2 rounded-lg bg-{{peer_state_colors['joining']}}-200 hover:bg-{{peer_state_colors['joining']}}-100  transition duration-75 {{ 'joining' }}">
+          {{ state_chars['joining'] }}
+        </td>
+        <td class="px-3">joining</td>
+        <td class="px-3">Loading blocks, joining soon</td>
+      </tr>
+      <tr>
+        <td class="bm !text-center drop-shadow-sm border-white border-2 rounded-lg bg-{{peer_state_colors['unreachable']}}-200 hover:bg-{{peer_state_colors['unreachable']}}-100  transition duration-75 {{ 'unreachable' }}">
+          {{ state_chars['unreachable'] }}
+        </td>
+        <td class="px-3">unreachable</td>
+        <td class="px-3">Unreachable from the Internet, see "Reachability issues" below</td>
+      </tr>
+      <tr>
+        <td class="bm !text-center drop-shadow-sm border-white border-2 rounded-lg bg-{{peer_state_colors['offline']}}-200 hover:bg-{{peer_state_colors['offline']}}-100  transition duration-75 {{ 'offline' }}">
+          {{ state_chars['offline'] }}
+        </td>
+        <td class="px-3">offline</td>
+        <td class="px-3">Disconnected a few minutes ago</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- <section>
+  <span class="text-gray-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-lg border border-gray-500">Legend</span>
+
+  <table class="legend">
+    <thead>
+      <tr>
+        <th colspan="2">Status</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td class="online text-xl">●</td><td>online</td><td>Up and running</td></tr>
+      <tr><td class="joining text-xl">●</td><td>joining</td><td>Loading blocks, joining soon</td></tr>
+      <tr><td class="unreachable text-xl">✖</td><td>unreachable</td><td>Unreachable from the Internet, see "Reachability issues" below</td></tr>
+      <tr><td class="offline text-xl">_</td><td>offline</td><td>Disconnected a few minutes ago</td></tr>
+    </tbody>
+  </table>
+</section> -->
+
+{% if reachability_issues %}
+<section>
+  <p>Reachability issues:</p>
+  <p class="hint">
+    Servers may be unreachable due to port forwarding/NAT/firewall issues.
+    Normally, they should become reachable in a few minutes, once they join
+    a <a href="https://docs.libp2p.io/concepts/nat/circuit-relay/">libp2p circuit relay</a>.
+    If your server fails to do that, please ask for help
+    in the <b><a target="_blank" href="https://discord.gg/X7DgtxgMhc" class="text-blue-400">#running-a-server</a></b> channel of our Discord.
+  </p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Peer ID</th>
+        <th>Error message</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in reachability_issues %}
+      <tr>
+        <td>{{ row.peer_id }}</td>
+        <td class="error-message">{{ row.err }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+{% endif %}
+
+</main>
+
+<footer>
+  <div class="footer-data flex flex-col gap-2.5">
+    <div class="flex flex-col gap-1">
+      <div>
+        Last updated: {{ last_updated.strftime('%H:%M:%S') }} UTC (update in {{ update_period }} sec).
+      </div>
+      <div>
+        Next update: <span id="next-update">{{ next_update.strftime('%H:%M:%S') }}</span> UTC.
+      </div>  
+    </div>
+    <div class="flex flex-col gap-1 lg:fl ex-row lg:justify-between">
+      <div>
+        See source code and API docs on <a target="_blank" href="https://github.com/hypertensor-blockchain" class="text-blue-400">GitHub</a>.
+      </div>
+      <div>
+        Contribute your GPU to Petals Tensor for rewards on <a target="_blank" href="https://github.com/hypertensor-blockchain" class="text-blue-400">GitHub</a>.
+      </div>
+      <div>
+        See original source code from Petals on <a target="_blank" href="https://github.com/petals-infra/health.petals.dev" class="text-blue-400">GitHub</a>.
+      </div>
+      <div>
+        Contribute your GPU to Petals on <a target="_blank" href="https://github.com/bigscience-workshop/petals" class="text-blue-400">GitHub</a>.
+      </div>  
+    </div>
+  </div>
+</footer>
+
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js" crossorigin="anonymous"></script>
+<script src="./static/health.js?v=3"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
+<script type="text/javascript" charset="utf-8">
+  var socket = io();
+  socket.on('connect', function() {
+    console.log('connected');
+    socket.emit('dht_update');
+  });
+
+  setInterval(function () {
+    console.log('dht_updating...');
+    socket.emit('dht_update');
+  }, 10000);
+
+</script>
+
+</body>
+</html>

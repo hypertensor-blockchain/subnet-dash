@@ -1,0 +1,5 @@
+git+https://github.com/hypertensor-blockchain/subnet-llm
+Flask
+flask-cors
+simplejson
+gunicorn[gthread]
