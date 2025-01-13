@@ -30,8 +30,8 @@ dht = hivemind.DHT(
     client_mode=True, 
     num_workers=32, 
     start=True,
-    authorizer=POSAuthorizer(private_key)
-    # authorizer=POSAuthorizerLive(private_key, 1, SubstrateInterface(url='wss://rpc.hypertensor.org:443'))
+    # authorizer=POSAuthorizer(private_key)
+    authorizer=POSAuthorizerLive(private_key, 1, SubstrateInterface(url='wss://rpc.hypertensor.org:443'))
 )
 
 logger.info("Starting Flask app")
