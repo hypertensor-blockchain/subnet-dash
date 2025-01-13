@@ -1,8 +1,8 @@
 body {
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    /* font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; */
+    font-family: 'Lexend Peta', system-ui, -apple-system;
     font-size: 9pt;
     padding: 20px;
-    /* background-color: #282828; */
 }
 
 section {
@@ -40,7 +40,7 @@ header {
 
 header h1 {
     display: inline-block;
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    /* font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; */
     font-size: 20pt;
 }
 
@@ -84,7 +84,7 @@ section p {
 }
 
 .loading p, .error p {
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    /* font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; */
     font-weight: 400;
 }
 
@@ -123,13 +123,13 @@ table {
 
 thead td {
     padding: 5px;
-    background-color: #eaeaff;
+    /* background-color: #eaeaff; */
     text-align: center;
 }
 
 thead th {
     padding: 5px;
-    background-color: #eaeaff;
+    /* background-color: #eaeaff; */
     text-align: center;
     font-weight: normal;
 }
@@ -142,9 +142,9 @@ table th:last-child{
     border-radius: 0 0.28rem 0.28rem 0;
 }
   
-td.contributor {
+/* td.contributor {
     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-}
+} */
 
 .bm-header {
     text-align: left;
@@ -157,7 +157,7 @@ tbody td {
 }
 
 tbody tr:hover {
-    background-color: #eaeaff;
+    background-color: #102211;
 }
 
 .legend tbody td {
@@ -171,8 +171,6 @@ tbody tr:hover {
     min-width: 20px !important;
     max-height: 20px !important;
     max-width: 20px !important;
-    /* padding: 0.1px; */
-    /* white-space: pre; */
     margin: 0.1px;
 }
 

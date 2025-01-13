@@ -7,9 +7,11 @@ from functools import partial
 
 import hivemind
 import numpy as np
-from multiaddr import Multiaddr
-from petals_tensor.data_structures import UID_DELIMITER, ServerState
-from petals_tensor.utils.dht import compute_spans, get_remote_module_infos
+# from multiaddr import Multiaddr
+from hivemind.p2p.multiaddr import Multiaddr
+
+from petals.data_structures import UID_DELIMITER, ServerState
+from petals.utils.dht import compute_spans, get_remote_module_infos
 
 import config
 from data_structures import ModelInfo
@@ -54,7 +56,6 @@ def fetch_health_state(dht: hivemind.DHT) -> dict:
     all_servers = {}
     offset = 0
     for model in models:
-        print("model.num_blocks -> ", model.num_blocks)
         model_servers[model.dht_prefix] = compute_spans(
             module_infos[offset : offset + model.num_blocks], min_state=ServerState.OFFLINE
         )

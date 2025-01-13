@@ -1,5 +1,6 @@
-git+https://github.com/hypertensor-blockchain/subnet-llm
+git+https://github.com/hayotensor/subnet-llm-template
 Flask
 flask-cors
 simplejson
 gunicorn[gthread]
+py-multibase>=1.0.3
