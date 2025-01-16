@@ -115,10 +115,15 @@ def fetch_health_state(dht: hivemind.DHT) -> dict:
         dict(peer_id=peer_id, err=info["error"]) for peer_id, info in sorted(reach_infos.items()) if not info["ok"]
     ]
 
+    model_reports_len = 0
+    if len(model_reports) != 0:
+        model_reports_len = len(model_reports)
+
     return dict(
         bootstrap_states=bootstrap_states,
         top_contributors=top_contributors,
         model_reports=model_reports,
+        models_len=model_reports_len,
         reachability_issues=reachability_issues,
         last_updated=datetime.datetime.now(datetime.timezone.utc),
         next_update=datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(seconds=config.UPDATE_PERIOD),

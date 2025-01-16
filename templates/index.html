@@ -44,12 +44,23 @@
   <div class="">
     Subnets:
     <span class="toc">
-    {% for model in model_reports %}
-    <a class="{{ model.state }}" href="#{{ model.short_name }}" title="DHT prefix: {{ model.dht_prefix }}">
-      <span class="bg-neutral-100 text-neutral-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-lg">{{ model.short_name }}</span>
-    </a>
-    <!-- {% if not loop.last %}<span class="bull">&bull;</span>{% endif %} -->
-    {% endfor %}
+    {%for i in range(0, models_len)%} 
+      <a class="{{ model_reports[i].state }}" href="#{{ model_reports[i].short_name }}" title="DHT prefix: {{ model_reports[i].dht_prefix }}">
+        <span class="bg-neutral-100 text-neutral-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-lg">DSN-{{ i + 1}}</span>
+      </a>
+    {%endfor%} 
+
+    <!-- {% for model in model_reports %}
+      {% if model.short_name == "Llama-3.1-8B-Lexi-Uncensored-V2" %}
+        <a class="{{ model.state }}" href="#{{ model.short_name }}" title="DHT prefix: {{ model.dht_prefix }}">
+          <span class="bg-neutral-100 text-neutral-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-lg">DSN-1</span>
+        </a>
+      {% else %}
+        <a class="{{ model.state }}" href="#{{ model.short_name }}" title="DHT prefix: {{ model.dht_prefix }}">
+          <span class="bg-neutral-100 text-neutral-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-lg">{{ model.short_name }}</span>
+        </a>
+      {% endif %}
+    {% endfor %} -->
     </span>
   </div>
 </section>
