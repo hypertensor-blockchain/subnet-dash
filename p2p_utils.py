@@ -4,7 +4,7 @@ import requests
 import hivemind
 import functools
 from async_timeout import timeout
-from petals.server.handler import TransformerConnectionHandler
+from subnet.server.handler import TransformerConnectionHandler
 
 info_cache = hivemind.TimedStorage()
 

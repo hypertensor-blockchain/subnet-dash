@@ -1,12 +1,12 @@
 from typing import Optional
 from urllib.parse import urlparse
 
-import petals
+import subnet
 import pydantic.v1 as pydantic
 
 
 @pydantic.dataclasses.dataclass
-class ModelInfo(petals.data_structures.ModelInfo):
+class ModelInfo(subnet.data_structures.ModelInfo):
     dht_prefix: Optional[str] = None
     official: bool = True
     limited: bool = False

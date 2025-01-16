@@ -10,8 +10,8 @@ import numpy as np
 # from multiaddr import Multiaddr
 from hivemind.p2p.multiaddr import Multiaddr
 
-from petals.data_structures import UID_DELIMITER, ServerState
-from petals.utils.dht import compute_spans, get_remote_module_infos
+from subnet.data_structures import UID_DELIMITER, ServerState
+from subnet.utils.dht import compute_spans, get_remote_module_infos
 
 import config
 from data_structures import ModelInfo
