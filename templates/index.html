@@ -11,7 +11,17 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Lexend+Peta:wght@100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
-  </head>
+  <!-- <meta name="twitter:card" content="Hypertensor Subnet Dashboard" /> -->
+  <meta name="twitter:site" content="@hyper_tensor" />
+  <meta name="twitter:creator" content="@hyper_tensor" />
+  <meta name="twitter:url" content="https://dash.hypertensor.org">
+  <meta name="twitter:image" content="./static/logo.svg">
+  <meta name="twitter:image:alt" content="Hypertensor">
+  <meta property="og:url" content="http://bits.blogs.nytimes.com/2011/12/08/a-twitter-for-my-sister/" />
+  <meta property="og:title" content="Subnet Dashboard | Hypertensor" />
+  <meta property="og:description" content="Check out all of the subnets and AI subnet validator nodes in the Hypertensor platform" />
+  <meta property="og:image" content="http://graphics8.nytimes.com/images/2011/12/08/technology/bits-newtwitter/bits-newtwitter-tmagArticle.jpg" />    
+</head>
 <body class="flex flex-col min-h-screen justify-between text-neutral-100 bg-neutral-950">
 
 <header>
@@ -65,7 +75,7 @@
   </div>
 </section>
 
-{% for model in model_reports %}
+<!-- {% for model in model_reports %}
 <section id="{{ model.short_name }}">
   <div class="text-neutral-50 flex flex-row gap-2.5 items-center">
     <span class="bg-neutral-50 text-neutral-950 text-xs font-medium px-2.5 py-0.5 rounded-lg">Subnet</span>
@@ -75,18 +85,6 @@
       <span class="relative inline-flex rounded-full h-2 w-2 bg-{{ model_state_colors[model.state] }}-500"></span>
     </span>    
   </div>
-
-  <!-- {% if not model.official %}
-  <div class="hint">This model is <b>not</b> officially supported. Use it at your own risk.</div>
-  {% endif %}
-
-  {% if model.limited %}
-  <div class="hint">
-    This model is supposed to be used by our <a target="_blank" href="https://chat.hypertensor.org">chatbot app</a> only.
-    We do not provide a public API for this model due to
-    <a target="_blank" href="https://huggingface.co/spaces/tiiuae/falcon-180b-license/blob/main/LICENSE.txt" class="text-blue-400">license</a> restrictions.
-  </div>
-  {% endif %} -->
 
   <table class="servers text-[8pt]">
     <thead class="bg-neutral-900">
@@ -147,9 +145,6 @@
           {% endfor %}
         </td>
         <td>{{ row.span.start }}:{{ row.span.end }}</td>
-        <!-- {% for _ in range(0, row.span.start) %}<td class="bm drop-shadow-sm border-transparent border-2 rounded-lg bg-slate-300 hover:bg-slate-200 transition duration-75"> </td>{% endfor %}
-        <span>{% for _ in range(row.span.start, row.span.end) %}<td class="bm drop-shadow-sm border-transparent border-2 rounded-lg bg-{{peer_state_colors[row.state]}}-200 hover:bg-{{peer_state_colors[row.state]}}-100  transition duration-75 {{ row.state }}">{{ state_chars[row.state] }}</td>{% endfor %}</span>
-        {% for _ in range(row.span.end, model.num_blocks) %}<td class="bm drop-shadow-sm border-transparent border-2 rounded-lg bg-slate-300 hover:bg-slate-200 transition duration-75"> </td>{% endfor %} -->
         {% for _ in range(0, row.span.start) %}<td><div class="bm text-[8pt] font-sans drop-shadow-sm rounded-sm bg-slate-300 hover:bg-slate-200 transition duration-75 text-center"></div></td>{% endfor %}
         <span>{% for _ in range(row.span.start, row.span.end) %}<td><div class="bm text-[8pt] font-sans drop-shadow-sm rounded-sm bg-{{peer_state_colors[row.state]}}-200 hover:bg-{{peer_state_colors[row.state]}}-100 transition duration-75 {{ row.state }} text-center">{{ state_chars[row.state] }}</div></td>{% endfor %}</span>
         {% for _ in range(row.span.end, model.num_blocks) %}<td><div class="bm text-[8pt] font-sans drop-shadow-sm rounded-sm bg-slate-300 hover:bg-slate-200 transition duration-75 text-center"></div></td>{% endfor %}
@@ -166,6 +161,100 @@
     and increase the subnets capacity!
   </div>
   {% endif %}
+</section>
+{% endfor %} -->
+
+{% for model in model_reports %}
+<section id="{{ model.short_name }}">
+  <div class="text-neutral-50 flex flex-row gap-2.5 items-center">
+    <span class="bg-neutral-50 text-neutral-950 text-xs font-medium px-2.5 py-0.5 rounded-lg">Subnet</span>
+    <a target="_blank" href="{{ model.repository }}" title="DHT prefix: {{ model.dht_prefix }}" class="hover:text-blue-300">{{ model.name }}</a>
+    <span class="relative flex h-2 w-2">
+      <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-{{ model_state_colors[model.state] }}-400 opacity-75"></span>
+      <span class="relative inline-flex rounded-full h-2 w-2 bg-{{ model_state_colors[model.state] }}-500"></span>
+    </span>    
+  </div>
+  <table class="servers text-[8pt]">
+    <thead class="bg-neutral-900">
+      <tr>
+        <th>Validators <a class="toggle-rps-details" href="#">»</a></th>
+        <th class="rps-details" style="display: none;">Version</td>
+        <th class="rps-details" style="display: none;">Throughput <a class="toggle-rps-details" href="#">»</a></th>
+        <th class="rps-details" style="display: none;">Inference <a class="explain-compute-rps" href="#">?</a></th>
+        <th class="rps-details" style="display: none;">Forward <a class="explain-compute-rps" href="#">?</a></th>
+        <th class="rps-details" style="display: none;">Network <a class="explain-network-rps" href="#">?</a></th>
+        <th class="rps-details" style="display: none;">Precision <a class="explain-precision" href="#">?</a></th>
+        <th class="rps-details" style="display: none;">LoRAs <a class="explain-adapters" href="#">?</a></th>
+        <th class="rps-details" style="display: none;">Cache <a class="explain-cache" href="#">?</a></th>
+        <th class="rps-details" style="display: none;">Avl. <a class="explain-avl" href="#">?</a></th>
+        <th class="rps-details" style="display: none;">Pings <a class="explain-pings" href="#">?</a></th>
+        <th class="bm-test-header-2" colspan="{{ model.num_blocks + 1 }}">Served blocks</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in model.server_rows %}
+      {% set server_info = row.span.server_info %}
+      <tr>
+        <td class="non-server-layer">
+          <span class="peer-id">{{ row.peer_id }}</span>
+        </td>
+        <td class="rps-details" style="display: none;">{% if server_info.version %}{{ server_info.version|truncate(10, True, '…') }}{% else %}&lt; 2.0.0{% endif %}</td>
+        <td class="rps-details" style="display: none;">{{ "%.0f" | format(server_info.throughput) }} tok/s</td>
+        <td class="rps-details" style="display: none;">
+          {% if server_info.inference_rps is not none %}{{ "%.0f" | format(server_info.inference_rps) }}{% endif %}
+        </td>
+        <td class="rps-details" style="display: none;">
+          {% if server_info.forward_rps is not none %}{{ "%.0f" | format(server_info.forward_rps) }}{% endif %}
+        </td>
+        <td class="rps-details" style="display: none;">
+          {% if server_info.network_rps is not none %}{{ "%.0f" | format(server_info.network_rps) }}{% endif %}
+        </td>
+        <td class="rps-details" style="display: none;">
+          {% if server_info.torch_dtype %}{{ server_info.torch_dtype | replace('float', 'f') }}{% endif %}
+          {% if server_info.quant_type and server_info.quant_type != "none" %}({{ server_info.quant_type }}){% endif %}
+        </td>
+        <td class="rps-details" style="display: none;">
+          {% for adapter in row.adapters %}
+          <a target="_blank" href="https://huggingface.co/{{adapter.name}}"">{{ adapter.short_name }}</a>
+          {% endfor %}
+        </td>
+        <td class="rps-details" style="display: none;">{% if server_info.cache_tokens_left is not none %}{{ row.cache_tokens_left_per_block }}{% endif %}</td>
+        <td class="rps-details" style="display: none;">{% if server_info.using_relay is not none %}{% if server_info.using_relay %}Relay{% else %}Direct{% endif %}{% endif %}</td>
+        <td class="ping rps-details" style="display: none;" data-peer-id="{{ row.peer_id }}">
+          {% if server_info.next_pings %}
+          <a class="show" href="#">Show</a>
+          <a class="hide" style="display: none;" href="#">Hide</a>
+          {% endif %}
+          {% for source_id, rtt in row.pings_to_me.items() %}
+          <span style="display: none;" class="rtt" data-source-id="{{ source_id }}">
+          {% if rtt <= 5 %}{{ "%.1f ms" | format(rtt * 1000) }}{% else %}&gt; 5 s{% endif %}
+          </span>
+          {% endfor %}
+        </td>
+        {% for _ in range(0, row.span.start) %}
+          <td class="bm-td-test-2 text-center">
+            <div class="bm-test-2 drop-shadow-sm bg-slate-300 hover:bg-neutral-500 text-center">
+            </div>
+          </td>
+        {% endfor %}
+          <span>
+            {% for _ in range(row.span.start, row.span.end) %}
+              <td class="bm-td-test-2 text-center">
+                <div class="bm-test-2 drop-shadow-sm bg-{{peer_state_colors[row.state]}}-200 hover:bg-neutral-500 {{ row.state }} text-center">
+                </div>
+              </td>
+            {% endfor %}
+          </span>
+        {% for _ in range(row.span.end, model.num_blocks) %}
+          <td class="bm-td-test-2 text-center">
+            <div class="bm-test-2 drop-shadow-sm bg-slate-300 hover:bg-neutral-500 text-center">
+            </div>
+          </td>
+        {% endfor %}
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
 </section>
 {% endfor %}
 

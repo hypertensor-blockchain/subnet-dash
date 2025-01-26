@@ -69,3 +69,7 @@ def api_v1_is_reachable(peer_id):
 @app.route("/api/prometheus")
 def metrics():
     return app.response_class(response=updater.prometheus_metrics, status=200, mimetype="text/plain")
+
+@app.route('/preview', methods=['GET'])
+def generate_preview():
+    return app.response_class(response=updater.state_json, status=200, mimetype="application/json")
