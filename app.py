@@ -10,7 +10,6 @@ from cryptography.hazmat.primitives.asymmetric import ed25519
 from substrateinterface import SubstrateInterface
 from pyppeteer import launch
 from io import BytesIO
-import asyncio
 from asgiref.wsgi import WsgiToAsgi
 
 # from flask_socketio import SocketIO, send, emit
@@ -476,7 +475,6 @@ async def generate_preview():
     browser = await launch(headless=True)
     page = await browser.newPage()
 
-    # await page.setViewport({"width": 800, "height": 418, "deviceScaleFactor": 2})
     await page.setViewport({"width": 1200, "height": 628, "deviceScaleFactor": 2})
 
     # Set the rendered HTML content
@@ -498,3 +496,6 @@ async def generate_preview():
     )
 
 app = WsgiToAsgi(app)
+
+# if __name__ == '__main__':
+#   app.run()
