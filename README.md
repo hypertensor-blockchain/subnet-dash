@@ -41,6 +41,10 @@ In production, we recommend using gunicorn instead of the Flask dev server:
 
 ```bash
 gunicorn app:app --bind 0.0.0.0:5000 --worker-class gthread --threads 10 --timeout 120
+
+# or
+
+gunicorn -k uvicorn.workers.UvicornWorker app:app --bind 0.0.0.0:5000 --worker-class gthread --threads 10 --timeout 120
 ```
 
 <details>

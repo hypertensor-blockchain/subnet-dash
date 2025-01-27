@@ -1,6 +1,9 @@
 git+https://github.com/hayotensor/subnet-llm-template
 Flask
+Flask[async]
 flask-cors
 simplejson
 gunicorn[gthread]
 py-multibase>=1.0.3
+pyppeteer
+uvicorn

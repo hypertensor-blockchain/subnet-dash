@@ -17,12 +17,12 @@
   <meta name="twitter:url" content="https://dash.hypertensor.org">
   <meta name="twitter:image" content="./static/logo.svg">
   <meta name="twitter:image:alt" content="Hypertensor">
-  <meta property="og:url" content="http://bits.blogs.nytimes.com/2011/12/08/a-twitter-for-my-sister/" />
+  <meta property="og:url" content="https://dash.hypertensor.org" />
   <meta property="og:title" content="Subnet Dashboard | Hypertensor" />
-  <meta property="og:description" content="Check out all of the subnets and AI subnet validator nodes in the Hypertensor platform" />
-  <meta property="og:image" content="http://graphics8.nytimes.com/images/2011/12/08/technology/bits-newtwitter/bits-newtwitter-tmagArticle.jpg" />    
+  <meta property="og:description" content="Check out all of the subnets and AI subnet validator nodes on the Hypertensor platform" />
+  <meta property="og:image" content="https://dash.hypertensor.org/preview.png" />    
 </head>
-<body class="flex flex-col min-h-screen justify-between text-neutral-100 bg-neutral-950">
+<body class="flex flex-col min-h-screen text-neutral-100 bg-neutral-950">
 
 <header>
   <div class="flex flex-row gap-2.5 justify-center items-center pt-4">
@@ -270,39 +270,32 @@
     </thead>
     <tbody>
       <tr>
-        <td>
-          <div class="bm text-[8pt] font-sans drop-shadow-sm rounded-sm bg-{{peer_state_colors['online']}}-200 hover:bg-{{peer_state_colors['online']}}-100 transition duration-75 {{ 'online' }} text-center">
-            {{ state_chars['online'] }}
+        <td class="bm-td-test-2 text-center">
+          <div class="bm-test-2 drop-shadow-sm bg-emerald-200 hover:bg-neutral-500 online text-center">
           </div>
         </td>
         <td class="px-3">online</td>
         <td class="px-3">Up and running</td>
       </tr>
       <tr>
-        <td>
-          <div class="bm text-[8pt] font-sans drop-shadow-sm rounded-sm bg-{{peer_state_colors['joining']}}-200 hover:bg-{{peer_state_colors['joining']}}-100 transition duration-75 {{ 'joining' }} text-center">
-            {{ state_chars['joining'] }}
+        <td class="bm-td-test-2 text-center">
+          <div class="bm-test-2 drop-shadow-sm bg-blue-200 hover:bg-neutral-500 joining text-center">
           </div>
         </td>
         <td class="px-3">joining</td>
         <td class="px-3">Loading blocks, joining soon</td>
       </tr>
       <tr>
-        <!-- <td class="bm !text-center drop-shadow-sm border-transparent border-2 rounded-lg bg-{{peer_state_colors['unreachable']}}-200 hover:bg-{{peer_state_colors['unreachable']}}-100  transition duration-75 {{ 'unreachable' }}">
-          {{ state_chars['unreachable'] }}
-        </td> -->
-        <td>
-          <div class="bm text-[8pt] font-sans drop-shadow-sm rounded-sm bg-{{peer_state_colors['unreachable']}}-200 hover:bg-{{peer_state_colors['unreachable']}}-100 transition duration-75 {{ 'unreachable' }} text-center">
-            {{ state_chars['unreachable'] }}
+        <td class="bm-td-test-2 text-center">
+          <div class="bm-test-2 drop-shadow-sm bg-red-200 hover:bg-neutral-500 unreachable text-center">
           </div>
         </td>
         <td class="px-3">unreachable</td>
         <td class="px-3">Unreachable from the Internet, see "Reachability issues" below</td>
       </tr>
       <tr>
-        <td>
-          <div class="bm text-[8pt] font-sans drop-shadow-sm rounded-sm bg-{{peer_state_colors['offline']}}-800 hover:bg-{{peer_state_colors['offline']}}-700 transition duration-75 {{ 'offline' }} text-center">
-            {{ state_chars['offline'] }}
+        <td class="bm-td-test-2 text-center">
+          <div class="bm-test-2 drop-shadow-sm bg-neutral-800 hover:bg-neutral-500 offline text-center">
           </div>
         </td>
         <td class="px-3">offline</td>
