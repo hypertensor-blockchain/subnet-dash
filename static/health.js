@@ -95,45 +95,19 @@ $(() => {
 
   setInterval(function () {
     const nextUpdate = $('#next-update').text();
-    console.log("nextIpdate ->", nextUpdate);
     var dt = new Date();
     var dt_utc = Date.now();
-
     var utcSeconds = dt.getUTCSeconds();
     var utcMonth = dt.getUTCMonth();
     var utcDay = dt.getUTCDate();
     var utcYear = dt.getUTCFullYear();
-    // console.log("dt_utc ->", dt_utc);
-
-    // console.log("utcSeconds ->", utcSeconds);  
-    // console.log("utcMonth ->", utcMonth);  
-    // console.log("utcDay ->", utcDay);  
-    // console.log("utcYear ->", utcYear);  
-
     let newString = nextUpdate.replaceAll(":", ",");
-    // console.log("newString ->", newString);
-
     const dateStrings = newString.split(',');
-    // console.log("dateStrings ->", dateStrings);
     const hour = dateStrings[0]
     const minutes = dateStrings[1]
     const seconds = dateStrings[2]
-    // console.log("hour ->", hour);
-    // console.log("minutes ->", minutes);
-    // console.log("seconds ->", seconds);
-
-    // let nextDate1 = new Date(words)
-    // console.log("nextDate1 ->", nextDate1);
-
     let nextDate = new Date(Date.UTC(utcYear, utcMonth, utcDay, hour, minutes, seconds));
-    // console.log("nextDate ->", nextDate);
-
     let remainingSeconds = Math.floor((nextDate - dt_utc) / 1000);
-    console.log("remainingSeconds ->", remainingSeconds);
-
-
-    // var time = dt.getHours() + ":" + dt.getMinutes() + ":" + dt.getSeconds();
-    // console.log("time ->", time);  
   }, 1000);
 
 });
